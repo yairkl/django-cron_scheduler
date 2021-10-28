@@ -1,0 +1,18 @@
+<div class="d-flex text-muted pt-3" style="min-width: 200px;">
+        <input value="{{action.id}}" name='delete' style="width: 0%; visibility: hidden;">
+
+    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+        <div class="d-flex justify-content-between">
+            <div>
+                <strong class="text-gray-dark">{{action.time}}</strong><br/>
+                <span class="d-block">{{action.action}} the {{action.switch}}</span>
+            </div>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    {% with act_id=action.id|stringformat:'s'%}
+                    {% include 'actionFormModal.html' with days_map=days_map curr_day=day switches=switches post_url=request.get_full_path id='editActionModal'|add:act_id action=action btn_class="btn btn-outline-primary" btn_content='<i class="fa fa-edit align-middle"></i>'%}
+                    {%endwith%}
+                    <form class="btn btn-outline-danger p-0"><button value="{{action.id}}" name='delete' class="btn btn-outline-danger border-0 w-100 h-100"><i class="fa fa-trash align-middle"></i></button></form>
+                </div>
+        </div>
+    </div>
+</div>

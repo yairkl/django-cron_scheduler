@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block menu %}
+    {% for d,actions in actions.items%}
+        <a class="nav-link" aria-current="page" href="{%url 'day' d%}">
+            <h5>{{d}}</h5>
+        </a>
+    {%endfor%}
+{%endblock%}
+
+{%block headerButtons%}
+    {% include 'actionFormModal.html' with days_map=days_map curr_day=day switches=switches post_url=request.get_full_path id='addActionModal'%}
+{%endblock%}
+
+{% block content %}
+<script src="{% static 'switches.js' %}"></script>
+    {%for switch in switches%}
+    <div class="form-check form-switch w-100" >
+        <h3>{{switch}}</h3>
+        <input class="form-check-input mx-auto switch" style="height: 50px; width: 100px;" type="checkbox" id="{{switch.id}}" onclick="setState({{switch.id}})" {% if switch.state %}checked{% endif %}>
+      </div><br><br><br>
+    {%endfor%}
+    <hr>
+    <div class="table-responsive">
+        <table class="table" style="display: table;">
+            {%for day,act in actions.items%}
+                <tr style="display: table-cell;">
+                    <th scope="col" style="display: block;">{{day}}</th>
+                    {% for action in act %}
+                        <td style="display: block; border-bottom:0ch;">
+                            {% include 'actionItem.html' with action=action%}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

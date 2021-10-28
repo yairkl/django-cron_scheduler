@@ -1,0 +1,79 @@
+        <button type="button" class="{{btn_class|default:'btn btn-sm btn-outline-primary'}}" data-bs-toggle="modal" data-bs-target="#{{id}}">{{btn_content|default:'Add'}}</button>
+          
+          <!-- Modal -->
+          <div class="modal fade" id="{{id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add Action</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ post_url }}" method="post">
+                    {% csrf_token %}
+                    <input class="form-control invisible" type="number" name="id" value="{{action.id}}"/>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label for="dayInput" class="col-sm-2 col-form-label">Day</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id='dayInput' name="day">
+                                    {% for id,day in days_map.items%}
+                                        <option value="{{id}}" 
+                                        {%if action%}
+                                            {% if id == action.day %}selected{%endif%}
+                                        {%else%}
+                                            {% if day == curr_day %}selected{%endif%}
+                                        {%endif%}
+                                        >{{day}}</option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="timeInput" class="col-sm-2 col-form-label">Time</label>
+                            <div class="col-sm-10 ">
+                                <input class="form-control" type="time" name="time" id="timeInput" value="{{action.time|stringformat:'s'}}" required/>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="switchInput" class="col-sm-2 col-form-label">Switch</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id='switchInput' name="switch">
+                                    {% for switch in switches%}
+                                        <option  value='{{switch.id}}' {% if action.switch.id == switch.id%}selected{%endif%}>{{switch.name}}</option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label for="actionInput" class="col-sm-2 col-form-label">Action</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" id='actionInput' name="action">
+                                    {% for actionType in actionTypes%}
+                                        <option  value='{{actionType.id}}' {% if action.action.id == actionType.id%}selected{%endif%}>{{actionType.name}}</option>
+                                    {%endfor%}
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="mb-3 row">
+                            <label for="actionInput" class="col-sm-2 col-form-label">Action</label>
+                            <div class="col-sm-10 form-check form-switch">
+                                <input class="form-check-input " type="checkbox" id="actionInput" name='action' {%if action.action%}checked{%endif%}>
+                            </div>
+                        </div> -->
+                          
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <input type="submit" class="btn btn-primary" value="Save"/>
+                      </div>      
+                </form>
+              </div>
+            </div>
+          </div>
+
