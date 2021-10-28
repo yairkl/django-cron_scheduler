@@ -2,9 +2,7 @@
 Cron_scheduler
 =====
 
-Cron_scheduler is a Django app to control and schedule tasks.
-
-Detailed documentation is in the "docs" directory.
+Cron_scheduler is a Django app to control and schedule tasks on Raspberry-pi GPIOs.
 
 Quick start
 -----------
@@ -22,8 +20,10 @@ Quick start
 
 3. Run ``python manage.py migrate`` to create the cron_scheduler models.
 
-4. Start the development server and visit http://127.0.0.1:8000/admin/
+4. Make shure the timezone is set currectly
+
+5. Start the development server and visit http://127.0.0.1:8000/admin/
    to create tasks (you'll need the Admin app enabled).
 
-5. Visit http://127.0.0.1:8000/scheduler/ to scedule tasks.
+6. Visit http://127.0.0.1:8000/scheduler/ to scedule tasks.
 
