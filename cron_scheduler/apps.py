@@ -7,6 +7,7 @@ class CronSchedulerConfig(AppConfig):
     def ready(self):
         try:
             if is_raspberrypi():
+                #restore GPIO previous state on application start
                 from .models import Switch
                 import RPi.GPIO as GPIO
                 switches = Switch.objects.filter(mode=GPIO.OUT)

@@ -4,33 +4,51 @@ from .apps import is_raspberrypi as is_pi
 if is_pi():
     import RPi.GPIO as GPIO
 
+# class ActionType(models.Model):
+#     name=models.CharField(max_length=200)
+#     command=models.TextField()
+
+#     def __str__(self):
+#         return self.name
+
+# class SwitchType(models.Model):
+#     name=models.CharField(max_length=200)
+#     status_action=models.ForeignKey(ActionType,on_delete=models.CASCADE)
+#     on_action=models.ForeignKey(ActionType,on_delete=models.CASCADE)
+#     off_action=models.ForeignKey(ActionType,on_delete=models.CASCADE)
+
 # Create your models here.
 class Switch(models.Model):
+    switch_types={
+        'GPIO':0,
+        'TASMOTA':1}
+
     name = models.CharField(max_length=200)
-    id = models.IntegerField(primary_key=True)
+    id = models.CharField(max_length=200,primary_key=True)
     mode = models.SmallIntegerField(choices=[(0,'Out'),(1,'In')],default=0)
     state = models.BooleanField()
+    switch_type = models.SmallIntegerField(choices=[(j,i) for i,j in switch_types.items()],default=0)
 
     def __str__(self):
         return self.name
 
     def save(self,*args,**kwargs):
         super().save(*args,**kwargs)
-        # print('saved',self.id,self.state)
-        if is_pi():
-            GPIO.setwarnings(False)
-            GPIO.setmode(GPIO.BCM)
-            GPIO.setup(self.id, self.mode)
-            if self.mode==0:
-                GPIO.output(self.id, GPIO.LOW if self.state else GPIO.HIGH)
+        self.apply_state()
 
-
-class ActionType(models.Model):
-    name=models.CharField(max_length=200)
-    command=models.TextField()
-
-    def __str__(self):
-        return self.name
+    def apply_state(self):
+        if self.switch_type==self.switch_types['GPIO']:
+            if  is_pi():
+                GPIO.setwarnings(False)
+                GPIO.setmode(GPIO.BCM)
+                GPIO.setup(self.id, self.mode)
+                if self.mode==0:
+                    GPIO.output(self.id, GPIO.HIGH if self.state else GPIO.LOW)
+            else:
+                print("GPIO at", self.id, 'to state', self.mode)
+        elif self.switch_type==self.switch_types['TASMOTA']:
+            #TODO implement backend
+            print('Tasmota at',self.id ,'to state', self.mode)
 
 class Action(models.Model):
     days={

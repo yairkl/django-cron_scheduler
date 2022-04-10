@@ -44,11 +44,11 @@ def add_action(data):
     act = Action(id=act_id,day=day,time=time,switch=switch,action=action)
     act.save()
 
-def getState(request,id):
+def get_state(request,id):
     switch = Switch.objects.get(id=id)
     return HttpResponse(switch.state)
 
-def setState(request,id,state):
+def set_state(request,id,state):
     switch=Switch.objects.get(id=id)
     switch.state=(state==1)
     switch.save()
